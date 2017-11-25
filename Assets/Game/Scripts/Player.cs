@@ -21,6 +21,10 @@ public class Player : MonoBehaviour {
 
 	// reference to UI Manager
 	private UIManager _uiManager;
+
+	// inventory 
+	private bool _hasCoin = false;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -119,4 +123,11 @@ public class Player : MonoBehaviour {
 		_uiManager.UpdateAmmo(_currentAmmo);
 		_isReloading = false;
 	}
+
+	public void CollectCoin()
+	{
+		_hasCoin = true;
+		_uiManager.UpdateCoin();
+	}
+
 }
