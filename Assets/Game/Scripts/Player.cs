@@ -16,6 +16,7 @@ public class Player : MonoBehaviour {
 	[SerializeField] private int _maxAmmo = 50;
 	
 	// references to other GO's
+	[SerializeField] private GameObject _weaponPrefab;
 	[SerializeField] private GameObject _muzzleFlash;
 	[SerializeField] private GameObject _hitMarker;
 
@@ -24,6 +25,15 @@ public class Player : MonoBehaviour {
 
 	// inventory 
 	private bool _hasCoin = false;
+	private bool _hasWeapon = false;
+
+	public bool hasCoin 
+	{
+		get
+		{
+			return _hasCoin;
+		}
+	}
 
 	// Use this for initialization
 	void Start () 
@@ -43,8 +53,7 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-
-		if (Input.GetMouseButton(0) && _currentAmmo > 0)
+		if (Input.GetMouseButton(0) && _currentAmmo > 0 && _hasWeapon)
 		{
 			Shoot();
 		}
@@ -113,6 +122,15 @@ public class Player : MonoBehaviour {
 			// create hitMarker and destroy after one second 
 			GameObject hitMarker = Instantiate(_hitMarker, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
 			Destroy(hitMarker, 1f);
+
+			// if you shoot a crate, destroy it
+			Destructible crate = hitInfo.transform.GetComponent<Destructible>();
+			if (crate != null)
+			{
+				crate.DestroyCrate();
+			}
+
+			
 		}
 	}
 
@@ -127,7 +145,15 @@ public class Player : MonoBehaviour {
 	public void CollectCoin()
 	{
 		_hasCoin = true;
-		_uiManager.UpdateCoin();
+		_uiManager.UpdateCoin(_hasCoin);
 	}
 
+	// activate the weapon and update inventory
+	public void CollectWeapon()
+	{
+		_hasCoin = false;
+		_hasWeapon = true;
+		_weaponPrefab.SetActive(true);
+		_uiManager.UpdateCoin(_hasCoin);
+	}
 }

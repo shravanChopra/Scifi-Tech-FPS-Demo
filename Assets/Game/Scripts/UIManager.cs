@@ -13,8 +13,8 @@ public class UIManager : MonoBehaviour
 		ammoText.text = "Ammo: " + ammoCount;
 	}
 	
-	public void UpdateCoin()
+	public void UpdateCoin(bool hasCoin)
 	{
-		coinImage.SetActive(true);
+		coinImage.SetActive(hasCoin);
 	}
 }
